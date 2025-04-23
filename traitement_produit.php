@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Exécution de la requête
     if ($stmt->execute()) {
         echo "✅ Produit ajouté avec succès.";
-        header('Location: http://mysofa.ct.ws/'); // Redirection après succès
+        header('Location: /'); // Redirection après succès
         exit;
     } else {
         echo "❌ Erreur lors de l'ajout du produit : " . $stmt->error;

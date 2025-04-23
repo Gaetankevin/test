@@ -14,7 +14,7 @@ if (isset($_POST['ajouter_client'])) {
 
     if ($conn->query($sql) === TRUE) {
         echo "✅ Client ajouté avec succès.";
-        header('location:http://mysofa.ct.ws/');
+        header('location:/');
     } else {
         echo "❌ Erreur : " . $conn->error;
     }

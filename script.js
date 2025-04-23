@@ -1,4 +1,4 @@
-axios.get("http://mysofa.ct.ws/welcome.php")
+axios.get("/welcome.php")
   .then(function (response) {
     document.getElementById("message").textContent = response.data.message;
   })
