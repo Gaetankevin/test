@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Vente - Gestion de Stock</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --orange-main: #FF8C00;
+      --orange-light: #FFA500;
+    }
+    .navbar {
+      background-color: var(--orange-main);
+    }
+    .navbar-brand, .nav-link {
+      color: white !important;
+    }
+    .btn-orange {
+      background-color: var(--orange-main);
+      color: white;
+    }
+    .btn-orange:hover {
+      background-color: #e67e00;
+    }
+  </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="http://mysofa.ct.ws/">Gestion de Stock</a>
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a class="nav-link" href="http://mysofa.ct.ws/http://mysofa.ct.ws/">Tableau de bord</a></li>
+        <li class="nav-item"><a class="nav-link" href="http://mysofa.ct.ws/clients.html">Clients</a></li>
+        <li class="nav-item"><a class="nav-link" href="http://mysofa.ct.ws/stock.html">Stock</a></li>
+        <li class="nav-item"><a class="nav-link" href="http://mysofa.ct.ws/factures.html">Factures</a></li>
+        <li class="nav-item"><a class="nav-link active" href="#">Vente</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <h2>Effectuer une Vente</h2>
+
+    <div class="mb-3">
+      <label for="client" class="form-label">Client</label>
+      <select id="client" name="client" class="form-select">
+        <option value="1">Gaetan</option>
+        <option value="2">Kemeni</option>
+        <option value="3">Fabiola</option>
+      </select>
+    </div>
+-
+    <div id="produits-container">
+      <div class="produit-row row g-2 mb-2">
+        <div class="col-md-4">
+          <select name="produit[]" class="form-select produit-select">
+            <option value="1" data-prix="600">Chaussure</option>
+            <option value="4" data-prix="9000000">Pneu</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <input type="number" name="quantite[]" class="form-control quantite-input" min="1" value="1">
+        </div>
+        <div class="col-md-2">
+          <input type="text" class="form-control prix-unitaire" disabled>
+        </div>
+        <div class="col-md-2">
+          <input type="text" class="form-control total-produit" disabled>
+        </div>
+        <div class="col-md-2">
+          <button type="button" class="btn btn-danger remove-produit">Supprimer</button>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="btn btn-success mb-3" id="add-produit">+ Ajouter un produit</button>
+
+    <div class="mb-3">
+      <label for="total-general" class="form-label">Montant Total</label>
+      <input type="text" id="total-general" class="form-control" disabled>
+    </div>
+
+    <button type="submit" class="btn btn-warning">Valider la vente</button>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  const updatePrixEtTotal = () => {
+    let totalGeneral = 0;
+
+    document.querySelectorAll('.produit-row').forEach(row => {
+      const select = row.querySelector('.produit-select');
+      const quantite = parseInt(row.querySelector('.quantite-input').value) || 0;
+      const prixUnitaire = parseInt(select.selectedOptions[0].dataset.prix) || 0;
+
+      const prixField = row.querySelector('.prix-unitaire');
+      const totalField = row.querySelector('.total-produit');
+
+      const total = prixUnitaire * quantite;
+      prixField.value = prixUnitaire;
+      totalField.value = total;
+
+      totalGeneral += total;
+    });
+
+    document.getElementById('total-general').value = totalGeneral;
+  };
+
+  document.getElementById('produits-container').addEventListener('input', updatePrixEtTotal);
+  document.getElementById('produits-container').addEventListener('change', updatePrixEtTotal);
+
+  document.getElementById('add-produit').addEventListener('click', () => {
+    const container = document.getElementById('produits-container');
+    const row = container.querySelector('.produit-row').cloneNode(true);
+
+    row.querySelector('.quantite-input').value = 1;
+    row.querySelector('.prix-unitaire').value = '';
+    row.querySelector('.total-produit').value = '';
+    container.appendChild(row);
+    updatePrixEtTotal();
+  });
+
+  document.getElementById('produits-container').addEventListener('click', function(e) {
+    if (e.target.classList.contains('remove-produit')) {
+      const rows = document.querySelectorAll('.produit-row');
+      if (rows.length > 1) {
+        e.target.closest('.produit-row').remove();
+        updatePrixEtTotal();
+      }
+    }
+  });
+
+  window.onload = updatePrixEtTotal;
+</script>
+
+</body>
+</html>
